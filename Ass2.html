@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Form</title>
+</head>
+<body>
+        <div class="border-solid  border-gray-900 drop-shadow-md  ">
+           <form onsubmit="event.preventDefault(); onFormSubmit()">
+            <h1 class="text-black text-2xl font-extrabold text-center mt-3 ml-3">PHP-MySQL CRUD</h1>
+            <table class="mt-3  ml-20">
+                
+                <tr><td class=""><label for="name"> Name:</label></td></tr>
+                 <tr><td><input class="p-1 border-2" type="text" id="Name" name="name"></td></tr>
+                
+            
+                
+                <tr><td class=""><label for="email">Email:</label></td> </tr>
+             <tr><td><input  class="p-1" type="email" id="email" name="email"></td></tr>
+                 
+               
+                <tr><td class=""><label for="mob">Contact:</label> </td></tr>
+                    <tr><td><input  class="p-1"  id="contact" name="mb" placeholder="+91"> </td></tr>
+                
+                <tr>
+                    <td class="">
+                        <label for="state">State:</label>
+                        </td></tr>
+
+                   <tr>
+                    <td>
+                        <select class="p-1" name="state" id="state">
+                            <option value="Maharashtra" selected>Maharashtra</option>   
+                            <option value="Madhya Pradesh ">Madhya Pradesh </option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value=" Punjab"> Punjab</option>
+                            <option value="Kerala">Kerala</option>
+                        </select>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class=""><label for="lname">Gender:</label></td></tr>
+                   <tr> <td>
+                        <input type="radio" id="gender" name="gender" value="Female" / checked>
+                       Female
+                        <input type="radio" id="gender1" name="gender" value="male"/>
+                        Male 
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <button class="p-2 m-2 bg-green-500 text-white border-solid border-1 border-slate-900 rounded-lg" type="submit" onclick="onFormSubmit()" form="nameform" value="Submit">Save</button>
+                        &nbsp;<button class="p-2 m-2 bg-green-500 text-white border-solid border-1 border-slate-900 rounded-lg" type="reset" form="nameform" value="reset">Reset</button>
+                    </td>
+                </tr>
+
+            </table>
+        </form>
+        </div>
+        <div>
+            <table class=" border-black-400 border-separate  border border-slate-400 ml-20 m-2" id="tableId" >
+                <thead>
+                 <tr>
+                   
+                    <th class="border border-slate-300">Name</th>
+                    <th class="border border-slate-300">Email</th>
+                    <th class="border border-slate-300">Contact</th>
+                    <th class="border border-slate-300">State</th>
+                    <th class="border border-slate-300">Gender</th>
+                    <th class="border border-slate-300">Edit</th>
+                    <th class="border border-slate-300">Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+       var selectedRow = null
+        function onFormSubmit() {
+                var formData = readFormData();
+                if (selectedRow == null)
+                    insertNewRecord(formData);
+                else
+                    updateRecord(formData);
+                resetForm();
+        }
+        function readFormData() {
+            var formData = {};
+            formData["Name"] = document.getElementById("Name").value;
+            formData["email"] = document.getElementById("email").value;
+            formData["contact"] = document.getElementById("contact").value;
+            formData["state"] = document.getElementById("state").value;
+            formData["gender"] = document.querySelector('input[name="gender"]:checked').value;
+            return formData;
+        }
+        function insertNewRecord(data) {
+            var table = document.getElementById("tableId").getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow(table.length);
+            cell1 = newRow.insertCell(0);
+            cell1.innerHTML = data.Name;
+            cell2 = newRow.insertCell(1);
+            cell2.innerHTML = data.email;
+            cell3 = newRow.insertCell(2);
+            cell3.innerHTML = data.contact;
+            cell4 = newRow.insertCell(3);
+            cell4.innerHTML = data.state;
+            cell5 = newRow.insertCell(4);
+            cell5.innerHTML = data.gender;
+            cell6 = newRow.insertCell(5);
+            cell6.innerHTML = `<button class="p-2 bg-blue-600 text-white rounded-lg" onClick="onEdit(this)">Edit</button>
+                       <button class="p-2 bg-red-600 text-white rounded-lg" onClick="onDelete(this)">Delete</button>`;
+        }
+        function resetForm() {
+            document.getElementById("Name").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("contact").value = "";
+            document.getElementById("state").value = "";
+            document.getElementById("gender").value = "";
+            selectedRow = null;
+        }
+        function onEdit(td) {
+            selectedRow = td.parentElement.parentElement;
+            document.getElementById("Name").value = selectedRow.cells[0].innerHTML;
+            document.getElementById("email").value = selectedRow.cells[1].innerHTML;
+            document.getElementById("contact").value = selectedRow.cells[2].innerHTML;
+            document.getElementById("state").value = selectedRow.cells[3].innerHTML;
+            document.getElementById("gender").value = selectedRow.cells[4].innerHTML;
+        }
+        function updateRecord(formData) {
+            selectedRow.cells[0].innerHTML = formData.Name;
+            selectedRow.cells[1].innerHTML = formData.email;
+            selectedRow.cells[2].innerHTML = formData.contact;
+            selectedRow.cells[3].innerHTML = formData.state;
+            selectedRow.cells[4].innerHTML = formData.gender;
+        }
+        function onDelete(td) {
+            if (confirm('Are you sure to delete this record ?')) {
+                row = td.parentElement.parentElement;
+                document.getElementById("tableId").deleteRow(row.rowIndex);
+                resetForm();
+            }
+        }
+    </script>
+</body>
+</html>
